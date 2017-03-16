@@ -1,5 +1,7 @@
 #-*-coding:utf-8 -*-
 import sys
+import pprint
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
@@ -14,7 +16,6 @@ fout=open('./output/urls.csv','w')
 for line in f:
     stkcd = str(line[:6])
     response=requests.get('http://www.cninfo.com.cn/cninfo-new/fulltextSearch/full?searchkey='+stkcd+'+招股说明书&sdate=&edate=&isfulltext=false&sortName=nothing&sortType=desc&pageNum=1')
-    import pprint
     dict=response.json()
     for i in dict['announcements']:
         if '摘要'.decode('utf-8') not in i['announcementTitle']:
