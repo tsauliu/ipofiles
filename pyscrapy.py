@@ -1,7 +1,6 @@
 #-*-coding:utf-8 -*-
 import sys
 import pprint
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
@@ -11,10 +10,13 @@ try:
     os.mkdir('./output')
 except:
     pass
+
+#从巨潮资讯解析出pdf的真实下载地址
 f=open('stkcd.csv','r')
 fout=open('./output/urls.csv','w')
 for line in f:
     stkcd = str(line[:6])
+    # 这一行把“招股说明书”换成　“年报”　“半年报”　之类的，即可批量下载其他的公告
     response=requests.get('http://www.cninfo.com.cn/cninfo-new/fulltextSearch/full?searchkey='+stkcd+'+招股说明书&sdate=&edate=&isfulltext=false&sortName=nothing&sortType=desc&pageNum=1')
     dict=response.json()
     for i in dict['announcements']:
@@ -29,6 +31,8 @@ for line in f:
             fout.write(csvtowrite.encode('gbk'))
 pprint.pprint(urldict)
 fout.close()
+
+#根据解析出的pdf地址下载到output，并重命名成有规律的文件
 import urllib2
 for name in urldict:
     url=urldict[name]
